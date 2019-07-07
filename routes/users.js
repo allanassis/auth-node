@@ -5,7 +5,7 @@ var bcrypt = require("bcrypt");
 
 var router = express.Router();
 
-/* GET users listing. */
+/* Verify the token, authorizations. */
 router.get("/auth", function(req, res, next) {
   let { authentication } = req.headers;
   authentication = authentication.split(" ")[1];
@@ -18,6 +18,7 @@ router.get("/auth", function(req, res, next) {
   });
 });
 
+/* Login route */
 router.get("/", function(req, res, next) {
   const { email, password } = req.body;
   User.find({ email }, (err, docs) => {
@@ -45,6 +46,7 @@ router.get("/", function(req, res, next) {
   });
 });
 
+/*create route*/
 router.post("/", function(req, res, next) {
   const { name, email, password } = req.body;
   bcrypt.genSalt(10).then(salt =>
