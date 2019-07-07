@@ -9,8 +9,10 @@ var usersRouter = require("./routes/users");
 
 var app = express();
 
-mongoose.connect("mongodb://localhost:27017/auth", { useNewUrlParser: true }, err =>
-  console.log(err)
+mongoose.connect(
+  "mongodb://localhost:27017/auth",
+  { useNewUrlParser: true },
+  err => console.log(err)
 );
 
 db = mongoose.connection;
@@ -21,7 +23,6 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
@@ -39,7 +40,10 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  if (err) {
+    res.send({ status: 500, data: { msg: err.message } });
+  }
+  res.send({ status: 200, data: { msg: "Ok" } });
 });
 
 module.exports = app;
